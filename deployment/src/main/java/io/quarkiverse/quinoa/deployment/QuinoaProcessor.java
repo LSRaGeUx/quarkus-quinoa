@@ -35,6 +35,7 @@ import io.quarkiverse.quinoa.deployment.items.BuiltResourcesBuildItem;
 import io.quarkiverse.quinoa.deployment.items.ConfiguredQuinoaBuildItem;
 import io.quarkiverse.quinoa.deployment.items.InstalledPackageManagerBuildItem;
 import io.quarkiverse.quinoa.deployment.items.PublishedPackageBuildItem;
+import io.quarkiverse.quinoa.deployment.items.QuinoaBuildPrerequisiteBuildItem;
 import io.quarkiverse.quinoa.deployment.items.TargetDirBuildItem;
 import io.quarkiverse.quinoa.deployment.items.TauriBuildItem;
 import io.quarkiverse.quinoa.deployment.packagemanager.PackageManagerInstall;
@@ -172,7 +173,8 @@ public class QuinoaProcessor {
             OutputTargetBuildItem outputTarget,
             LaunchModeBuildItem launchMode,
             LiveReloadBuildItem liveReload,
-            Optional<TauriBuildItem> tauriBuild) throws IOException {
+            Optional<TauriBuildItem> tauriBuild,
+            List<QuinoaBuildPrerequisiteBuildItem> prerequisites) throws IOException {
         if (configuredQuinoa == null) {
             return null;
         }
@@ -195,6 +197,7 @@ public class QuinoaProcessor {
                 && contextObject != null) {
             return new TargetDirBuildItem(contextObject.location());
         }
+        logPrerequisites(prerequisites);
         if (configuredQuinoa.resolvedConfig().runTests()) {
             packageManagerRunner.test();
         }
@@ -402,6 +405,14 @@ public class QuinoaProcessor {
 
         LOG.debug("package.json seems to be the same as previous Quinoa install, skipping packages install");
         return false;
+    }
+
+    static void logPrerequisites(List<QuinoaBuildPrerequisiteBuildItem> prerequisites) {
+        if (!prerequisites.isEmpty()) {
+            LOG.debugf("Quinoa waited for: %s", prerequisites.stream()
+                    .map(QuinoaBuildPrerequisiteBuildItem::getDescription)
+                    .collect(Collectors.joining(", ")));
+        }
     }
 
     static boolean isPackageJsonLiveReloadChanged(ConfiguredQuinoaBuildItem configuredQuinoa, LiveReloadBuildItem liveReload) {

@@ -1,0 +1,10 @@
+{
+  "name": "quinoa-openapi-app",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "build": "node build.js",
+    "start": "node build.js && node server.js"
+  },
+  "license": "MIT"
+}

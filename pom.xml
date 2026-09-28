@@ -17,6 +17,7 @@
     <module>deployment-testing</module>
     <module>deployment</module>
     <module>runtime</module>
+    <module>openapi</module>
     <module>testing</module>
     <module>docs-rag</module>
   </modules>

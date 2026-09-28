@@ -1,0 +1,7 @@
+name: Quinoa OpenAPI
+metadata:
+  unlisted: true
+  guide: https://quarkiverse.github.io/quarkiverse-docs/quarkus-quinoa/dev/advanced-guides.html#openapi-code-generation
+  categories:
+    - "web"
+  status: "stable"

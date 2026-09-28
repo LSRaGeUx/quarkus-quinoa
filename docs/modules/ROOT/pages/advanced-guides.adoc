@@ -232,6 +232,12 @@ Whenever you execute mvn quarkus:dev, it automatically produces the openapi.json
 }
 ----
 
+When a schema is stored, Quinoa waits for SmallRye OpenAPI to write it before running the build command or starting the dev server, so the generated code never comes from a missing or stale schema. There is nothing to add: the `quarkus-quinoa-openapi` extension is pulled in automatically when `quarkus-smallrye-openapi` is present. Without `store-schema-directory`, the Web UI build keeps running in parallel with the Java build.
+
+NOTE: With the dev server, the `dev` script (and so the code generation) only runs when the dev server starts. The schema is stored again on each live reload, so use the watch mode of your code generator if the TypeScript code must follow changes without a restart.
+
+Other extensions can make the Web UI build wait for their own generated files the same way, by producing an `io.quarkiverse.quinoa.deployment.items.QuinoaBuildPrerequisiteBuildItem`.
+
 === Continuous Integration (CI)
 
 Most CI images already include NodeJS. if they don't, just make sure to install it alongside Maven/Gradle (and Yarn/PNPM if needed). Then you can use it like any Maven/Gradle project.

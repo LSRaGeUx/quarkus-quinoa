@@ -27,6 +27,7 @@ import io.quarkiverse.quinoa.deployment.config.QuinoaConfig;
 import io.quarkiverse.quinoa.deployment.items.ConfiguredQuinoaBuildItem;
 import io.quarkiverse.quinoa.deployment.items.ForwardedDevServerBuildItem;
 import io.quarkiverse.quinoa.deployment.items.InstalledPackageManagerBuildItem;
+import io.quarkiverse.quinoa.deployment.items.QuinoaBuildPrerequisiteBuildItem;
 import io.quarkiverse.quinoa.deployment.packagemanager.PackageManagerRunner;
 import io.quarkus.deployment.IsDevelopment;
 import io.quarkus.deployment.annotations.BuildProducer;
@@ -62,7 +63,8 @@ public class ForwardedDevProcessor {
             Optional<ConsoleInstalledBuildItem> consoleInstalled,
             LoggingSetupBuildItem loggingSetup,
             CuratedApplicationShutdownBuildItem shutdown,
-            LiveReloadBuildItem liveReload) {
+            LiveReloadBuildItem liveReload,
+            List<QuinoaBuildPrerequisiteBuildItem> prerequisites) {
         if (configuredQuinoa == null) {
             return null;
         }
@@ -130,6 +132,7 @@ public class ForwardedDevProcessor {
         final long start = Instant.now().toEpochMilli();
         final AtomicReference<Process> dev = new AtomicReference<>();
         PackageManagerRunner.DevServer devServer = null;
+        QuinoaProcessor.logPrerequisites(prerequisites);
         try {
             devServer = packageManagerRunner.dev(consoleInstalled, loggingSetup, networkConfiguration,
                     checkPath, checkTimeout);
